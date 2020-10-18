@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "fsm_handling.py",
             "console": "internalConsole",
-            "args": ["test-files\\wp03_action.fsm"],
+            "args": ["test-files\\wp08_action.fsm.json"],
             "justMyCode": false
         },
         {
@@ -18,7 +18,8 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "console": "integratedTerminal"
+            "console": "internalConsole",
+            "justMyCode": false
         }
     ]
 }

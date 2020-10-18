@@ -1,7 +1,7 @@
 from ast import Str
 from io import BufferedReader, SEEK_SET
 from operator import sub
-from typing import Any
+from typing import Any, List
 from construct import *
 from construct.core import Int16ul, Int32sl, Int32ul, Int64ul, evaluate
 
@@ -142,10 +142,21 @@ class ClassImplementation(Adapter):
         super().__init__(ClassImpl(id))
 
     def _decode(self, obj, context, path):
-        return {i[0]:i[1] for i in obj}
+        newdict = {}
+        for pair in obj:
+            if len(pair[1]) == 1:
+                newdict[pair[0]] = pair[1][0]
+            else:
+                newdict[pair[0]] = pair[1]
+        return newdict
     
     def _encode(self, obj, context, path):
-        return [[k, v] for (k,v) in obj.items()]
+        newlist = []
+        for k,v in obj.items():
+            if not isinstance(v, list):
+                v = [v]
+            newlist.append([k, v])
+        return newlist
 
 
 def DataEntry(type):
@@ -191,6 +202,14 @@ def filterVariables(node):
         for val in node:
             filterVariables(val)
     return
+
+def importToContainer(node):
+    if isinstance(node, dict):
+        return Container({k: importToContainer(v) for (k, v) in node.items()})
+    if isinstance(node, list):
+        return ListContainer(importToContainer(i) for i in node)
+    return node
+
     
 
     
@@ -205,15 +224,16 @@ class Encoder(json.JSONEncoder):
 def decode(path):
     with open(path, 'rb') as f:
         main_dict = topLevel.parse_stream(f)
-
     filterVariables(main_dict)
-    with open(path + "redo", 'wb') as f:
-         topLevel.build_stream(main_dict, f)
     with open(path + ".json", 'w', encoding="utf-8") as f:
         json.dump(main_dict, f, cls=Encoder, indent=True, ensure_ascii=False)
 
 def encode(path):
-    pass
+    with open(path, 'r', encoding="utf8") as f:
+        main_dict = json.load(f)
+    main_dict = importToContainer(main_dict)
+    with open(path[:-5], 'wb') as f:
+        topLevel.build_stream(main_dict, f)
 
 target = sys.argv[1]
 if (target.endswith('.json')):
