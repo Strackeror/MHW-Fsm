@@ -110,19 +110,35 @@ def varHandling(this):
     varcount += 1
     return ret
 
-def ClassEntry(): 
+def ClassEntry_(): 
     return Struct(
-        "classId" / Int16ul,
-        "_valid" / Computed(lambda this: this.classId // 2 < len(this._root.defs)),
+        "CLASS_ID" / Int16ul,
+        "_valid" / Computed(lambda this: this.CLASS_ID // 2 < len(this._root.defs)),
         "_var" / IfThenElse(
             this._valid,
             Rebuild(Int16ul, varHandling),
             Default(Int16ul, 0)),
         "content" / If(this._valid,
             LazyBound(lambda: PrefixedOffset(
-                Int64ul, ClassImplementation(this._._.classId // 2), -8))
+                Int64ul, ClassImplementation(this._._.CLASS_ID // 2), -8))
            )
     )
+
+class ClassEntry(Adapter):
+    def __init__(self):
+        super().__init__(ClassEntry_())
+    
+    def _decode(self, obj, context, path):
+        if obj.content is not None:
+            obj = {**obj, **obj.content}
+            obj.pop("content")
+        return obj
+    
+    def _encode(self, obj, context, path):
+        ret = {"CLASS_ID": obj.CLASS_ID, "content": obj}
+        ret["content"].pop("CLASS_ID")
+        return ret
+        
 
 def ClassImpl(id):
   return FocusedSeq("classes",
