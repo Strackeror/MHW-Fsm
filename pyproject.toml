@@ -7,6 +7,8 @@ authors = ["Strackeror <rremilavergne@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 construct = "^2.10.56"
+networkx = "^2.5"
+pydot = "^1.4.1"
 
 [tool.poetry.dev-dependencies]
 

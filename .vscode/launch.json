@@ -10,7 +10,16 @@
             "request": "launch",
             "program": "fsm_handling.py",
             "console": "internalConsole",
-            "args": ["test-files\\wp08_action.fsm.json"],
+            "args": ["test-files\\wp03_action.fsm.json"],
+            "justMyCode": false
+        },
+        {
+            "name": "Python: Run with test file",
+            "type": "python",
+            "request": "launch",
+            "program": "fsm_graph.py",
+            "console": "internalConsole",
+            "args": ["test-files\\wp03_action.fsm.json"],
             "justMyCode": false
         },
         {
