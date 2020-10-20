@@ -10,7 +10,7 @@ def getConditionName(condition):
     conditionList = condition["mpRootNode"]["mpChildList"]
     if not isinstance(conditionList, list):
         conditionList = [conditionList]
-    return [n["mVariable"]["mPropertyName"] for n in conditionList if "mVariable" in n]
+    return f"{str(condition['mName']['mId'])}-{str([n['mVariable']['mPropertyName'] for n in conditionList if 'mVariable' in n])}"
 
 
 main_dict = json.load(open(sys.argv[1], 'r', encoding="utf8"))
@@ -18,9 +18,11 @@ main_dict = json.load(open(sys.argv[1], 'r', encoding="utf8"))
 nodes = [n for n in main_dict["root"]["mpRootCluster"]["mpNodeList"]]
 links = [link for link in main_dict["root"]["mpConditionTree"]["mpTreeList"]]
 
+print([getNodeName(n) for n in nodes])
+
 graph = nx.DiGraph()
 
-maxDepth = 1
+maxDepth = 1 
 nodeQueue = [(nodes[int(sys.argv[2])], 0)]
 while nodeQueue:
     node = nodeQueue[0][0]
