@@ -196,14 +196,15 @@ Header = Struct(
     "sig" / Byte[4],
     "version" / Int16ul,
     "type" / Int16ul,
-    "unkn0" / Int32ul,
-    "unkn1" / Int32ul,
+    "_classCountPos" / Tell,
+    "_classCount" / Rebuild(Int64ul, lambda _: 0),
 )
 
 topLevel = Struct(
     "header" / Header,
     "defs" / ClassDefinitionList,
-    "root" / ClassEntry()
+    "root" / ClassEntry(),
+    Pointer(this.header._classCountPos, Rebuild(Int64ul, varHandling))
 )
 
 
