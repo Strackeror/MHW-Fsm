@@ -174,6 +174,33 @@ class ClassImplementation(Adapter):
             newlist.append([k, v])
         return newlist
 
+def RGBA():
+    return Struct(
+        "red" / Byte,
+        "green" / Byte,
+        "blue" / Byte,
+        "alpha" / Byte)
+
+def Vector3():
+    return Struct(
+        "x" / Float32l,
+        "y" / Float32l,
+        "z" / Float32l,
+        "u" / Float32l)
+
+def Vector4():
+    return Struct(
+        "u" / Float32l,
+        "x" / Float32l,
+        "y" / Float32l,
+        "z" / Float32l)
+
+def Quat4():
+    return Struct(
+        "x" / Float32l,
+        "y" / Float32l,
+        "z" / Float32l,
+        "w" / Float32l)
 
 def DataEntry(type):
     return FocusedSeq("values",
@@ -182,11 +209,22 @@ def DataEntry(type):
             0: Pass,
             1: ClassEntry(),
             2: ClassEntry(),
-            3: Byte,
+            3: Byte, #boolean
             4: Byte,
+            5: Int16ul,
             6: Int32ul,
+            7: Int64ul,
+            8: Int8sl,
+            9: Int16sl,
             10: Int32sl,
+            11: Int64sl,
+            12: Float32l,
+            13: Float64l,
             14: CString("utf8"),
+            15: RGBA(),
+            20: Vector3(),
+            21: Vector4(),
+            22: Quat4()
         }, default=StopFieldError)[this._count],
     )
 
