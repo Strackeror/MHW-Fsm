@@ -186,14 +186,14 @@ def Vector3():
         "x" / Float32l,
         "y" / Float32l,
         "z" / Float32l,
-        "u" / Float32l)
+        "w" / Float32l)
 
 def Vector4():
     return Struct(
-        "u" / Float32l,
         "x" / Float32l,
         "y" / Float32l,
-        "z" / Float32l)
+        "z" / Float32l,
+        "w" / Float32l)
 
 def Quat4():
     return Struct(
