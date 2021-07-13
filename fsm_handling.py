@@ -222,6 +222,7 @@ def DataEntry(type):
             13: Float64l,
             14: CString("utf8"),
             15: RGBA(),
+            16: Int64ul, #pointer
             20: Vector3(),
             21: Vector4(),
             22: Quat4()

@@ -1,1 +1,4 @@
 test-files
+*.fsm
+*.json
+*.pseudo.py
