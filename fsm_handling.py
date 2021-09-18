@@ -9,6 +9,17 @@ from dataclasses import dataclass
 import sys
 import json
 
+def UnicodeSafeDecode(self, obj, context, path):
+    return obj.decode(self.encoding,'ignore')
+    #try:
+    #    return obj.decode(self.encoding)
+    #except:
+    #    origLen = len(obj)
+    #    missingStr = obj.decode(self.encoding,'ignore')
+    #    completedStr = missingStr + "$"*(origLen - len(missingStr.encode("utf-8")))
+    #    return completedStr
+
+StringEncoded._decode = UnicodeSafeDecode
 
 # Queued Pointer Handling
 
@@ -72,7 +83,7 @@ def PrefixedOffset(sizetype, type, offs = 0):
 # Class definition handling
 
 ClassMemberDefinition = Struct(
-    "name" / DataPointer(Int64ul, CString("utf8"), "names"),
+    "name" / DataPointer(Int64ul, CString("utf8"), "names"),#
     "type" / Byte,
     "unkn" / Byte,
     "size" / Byte,
